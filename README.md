@@ -18,8 +18,13 @@
 - Nghe lại âm thanh đã được xử lý
 - Cải thiện chất lượng âm thanh bằng AI
 
-### 3. Nhận diện Chó/Mèo (Đang phát triển)
-- Tab dành cho chức năng nhận diện tiếng kêu của động vật (chưa được triển khai)
+### 3. Nhận diện Âm thanh Động vật (Animal Recognition)
+- Ghi âm tiếng kêu của động vật hoặc các loại âm thanh khác
+- Sử dụng mô hình AST (Audio Spectrogram Transformer) với độ chính xác 96%
+- Hiển thị kết quả nhận diện với độ tin cậy (confidence)
+- Hiển thị top 5 kết quả có khả năng nhất
+- Nhận diện được nhiều loại động vật: chó, mèo, gà, bò, lợn, cừu, ếch, quạ, chim, dế, côn trùng
+- Cũng có thể nhận diện các âm thanh khác: máy bay, tàu hỏa, mưa, gió, v.v.
 
 ## 🛠️ Yêu cầu hệ thống
 
@@ -73,10 +78,17 @@ Dự án yêu cầu các mô hình sau:
 #### Mô hình Speech-to-Text:
 - Đường dẫn: `models/speech_to_text/speech-to-text-vn/whisper-vivos-final`
 - Mô hình Whisper đã được fine-tune cho tiếng Việt
+- **Lưu ý**: Đường dẫn này phải chứa trực tiếp các file model (config.json, model.safetensors, tokenizer.json, v.v.)
 
 #### Mô hình Denoising:
 - Đường dẫn: `models/denoiser/model_SE_v1.pth`
 - Mô hình Speech Enhancement (CNN + LSTM)
+
+#### Mô hình Nhận diện Động vật (Animal Recognition):
+- Đường dẫn: `models/My_AST_Model_96acc-20251227T152517Z-1-001/My_AST_Model_96acc`
+- Mô hình AST (Audio Spectrogram Transformer) với độ chính xác 96%
+- Nhận diện 50 loại âm thanh bao gồm: chó, mèo, gà, bò, lợn, cừu, ếch, quạ, chim, dế, côn trùng và nhiều âm thanh khác
+- **Lưu ý**: Đường dẫn này phải chứa trực tiếp các file model (config.json, model.safetensors, label_map.json, v.v.)
 
 **Lưu ý**: Bạn cần tải các mô hình này và đặt vào đúng thư mục như trên.
 
@@ -106,7 +118,8 @@ SpeechProcessing/
 │       └── audio_helper.py # Helper ghi âm
 ├── models/                # Thư mục chứa các mô hình
 │   ├── speech_to_text/
-│   └── denoiser/
+│   ├── denoiser/
+│   └── My_AST_Model_96acc-20251227T152517Z-1-001/  # Model nhận diện động vật
 └── recordings/            # Thư mục lưu file ghi âm
 ```
 
@@ -127,13 +140,21 @@ SpeechProcessing/
 5. Nhấn "CHẠY KHỬ NHIỄU (AI)" để xử lý
 6. Nhấn "Nghe giọng đã lọc nhiễu" để kiểm tra kết quả
 
+### Nhận diện âm thanh động vật
+1. Mở tab "Nhận diện Chó/Mèo"
+2. Nhấn "Bắt đầu Ghi âm"
+3. Ghi âm tiếng kêu của động vật (chó, mèo, gà, v.v.) hoặc các âm thanh khác
+4. Nhấn "Dừng" khi hoàn tất
+5. Nhấn "NHẬN DIỆN ÂM THANH" để xem kết quả
+6. Xem kết quả chính và top 5 kết quả có khả năng nhất
+
 ## 🔧 Cấu hình
 
 ### Thay đổi đường dẫn mô hình
 Nếu bạn đặt mô hình ở vị trí khác, chỉnh sửa trong `src/ui/main_window.py`:
 ```python
-self.stt_engine = STTEngine(model_path="đường/dẫn/của/bạn")
-self.denoise_engine = DenoiseEngine(model_path="đường/dẫn/của/bạn")
+self.stt_engine = STTEngine(model_path="models/speech_to_text/speech-to-text-vn/whisper-vivos-final")
+self.denoise_engine = DenoiseEngine(model_path="models/denoiser/model_SE_v1.pth")
 ```
 
 ### Thay đổi thiết bị xử lý

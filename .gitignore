@@ -1,3 +1,4 @@
 models/
 recordings/
 __pycache__/
+venv/
