@@ -1,2 +1,154 @@
 # SpeechProcessing
 Đồ án cuối kỳ môn Xử lý tiếng nói
+
+## 📋 Mô tả
+Ứng dụng xử lý tiếng nói với giao diện đồ họa (GUI) được xây dựng bằng Python và Tkinter. Dự án cung cấp các chức năng chính: chuyển đổi giọng nói sang văn bản (Speech-to-Text) và lọc nhiễu âm thanh (Audio Denoising).
+
+## ✨ Các chức năng
+
+### 1. Chuyển đổi giọng nói sang văn bản (Speech-to-Text)
+- Ghi âm giọng nói trực tiếp từ microphone
+- Chuyển đổi giọng nói tiếng Việt thành văn bản
+- Sử dụng mô hình Whisper đã được fine-tune cho tiếng Việt
+- Hỗ trợ GPU (CUDA) để tăng tốc xử lý
+
+### 2. Lọc nhiễu âm thanh (Audio Denoising)
+- Ghi âm trong môi trường có nhiễu
+- Sử dụng mô hình Deep Learning (CNN + LSTM) để loại bỏ nhiễu
+- Nghe lại âm thanh đã được xử lý
+- Cải thiện chất lượng âm thanh bằng AI
+
+### 3. Nhận diện Chó/Mèo (Đang phát triển)
+- Tab dành cho chức năng nhận diện tiếng kêu của động vật (chưa được triển khai)
+
+## 🛠️ Yêu cầu hệ thống
+
+### Phần mềm
+- Python 3.7 trở lên
+- PyTorch (hỗ trợ CUDA nếu có GPU NVIDIA)
+- Các thư viện Python (xem phần Cài đặt)
+
+### Phần cứng (khuyến nghị)
+- Microphone để ghi âm
+- GPU NVIDIA (tùy chọn, để tăng tốc xử lý)
+- RAM: Tối thiểu 4GB (khuyến nghị 8GB trở lên)
+
+## 📦 Cài đặt
+
+### 1. Clone repository
+```bash
+git clone <repository-url>
+cd SpeechProcessing
+```
+
+### 2. Tạo môi trường ảo (khuyến nghị)
+```bash
+python -m venv venv
+
+# Windows
+venv\Scripts\activate
+
+# Linux/Mac
+source venv/bin/activate
+```
+
+### 3. Cài đặt các thư viện cần thiết
+```bash
+pip install torch torchvision torchaudio
+pip install transformers
+pip install librosa
+pip install soundfile
+pip install sounddevice
+pip install numpy
+```
+
+Hoặc tạo file `requirements.txt` và cài đặt:
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Tải các mô hình
+Dự án yêu cầu các mô hình sau:
+
+#### Mô hình Speech-to-Text:
+- Đường dẫn: `models/speech_to_text/speech-to-text-vn/whisper-vivos-final`
+- Mô hình Whisper đã được fine-tune cho tiếng Việt
+
+#### Mô hình Denoising:
+- Đường dẫn: `models/denoiser/model_SE_v1.pth`
+- Mô hình Speech Enhancement (CNN + LSTM)
+
+**Lưu ý**: Bạn cần tải các mô hình này và đặt vào đúng thư mục như trên.
+
+## 🚀 Cách chạy dự án
+
+### Chạy ứng dụng chính
+```bash
+python main.py
+```
+
+Ứng dụng sẽ mở cửa sổ GUI với các tab chức năng.
+
+### Cấu trúc thư mục
+```
+SpeechProcessing/
+├── main.py                 # File chạy chính
+├── src/
+│   ├── core/              # Các engine xử lý
+│   │   ├── stt_engine.py  # Engine chuyển đổi giọng nói
+│   │   ├── denoise_engine.py  # Engine lọc nhiễu
+│   │   └── animal_engine.py   # Engine nhận diện động vật
+│   ├── ui/                # Giao diện người dùng
+│   │   ├── main_window.py # Cửa sổ chính
+│   │   ├── tabs/          # Các tab chức năng
+│   │   └── widgets/       # Các widget tái sử dụng
+│   └── utils/             # Tiện ích hỗ trợ
+│       └── audio_helper.py # Helper ghi âm
+├── models/                # Thư mục chứa các mô hình
+│   ├── speech_to_text/
+│   └── denoiser/
+└── recordings/            # Thư mục lưu file ghi âm
+```
+
+## 📖 Hướng dẫn sử dụng
+
+### Chuyển đổi giọng nói sang văn bản
+1. Mở tab "Chuyển đổi giọng nói sang văn bản"
+2. Nhấn nút "Bắt đầu Ghi âm"
+3. Nói vào microphone
+4. Nhấn "Dừng" khi hoàn tất
+5. Nhấn "Chuyển đổi sang Văn bản" để xem kết quả
+
+### Lọc nhiễu âm thanh
+1. Mở tab "Lọc nhiễu"
+2. Tạo môi trường có nhiễu (bật quạt, TV, v.v.)
+3. Nhấn "Bắt đầu Ghi âm" và nói
+4. Nhấn "Dừng" khi hoàn tất
+5. Nhấn "CHẠY KHỬ NHIỄU (AI)" để xử lý
+6. Nhấn "Nghe giọng đã lọc nhiễu" để kiểm tra kết quả
+
+## 🔧 Cấu hình
+
+### Thay đổi đường dẫn mô hình
+Nếu bạn đặt mô hình ở vị trí khác, chỉnh sửa trong `src/ui/main_window.py`:
+```python
+self.stt_engine = STTEngine(model_path="đường/dẫn/của/bạn")
+self.denoise_engine = DenoiseEngine(model_path="đường/dẫn/của/bạn")
+```
+
+### Thay đổi thiết bị xử lý
+- Ứng dụng tự động phát hiện GPU nếu có
+- Nếu không có GPU, sẽ tự động chuyển sang CPU
+- Xem log trong console để biết thiết bị đang sử dụng
+
+## ⚠️ Lưu ý
+- Đảm bảo microphone hoạt động bình thường
+- File ghi âm được lưu trong thư mục `recordings/`
+- Quá trình xử lý có thể mất vài giây, vui lòng đợi
+- Mô hình Whisper yêu cầu âm thanh ở tần số 16kHz
+
+## 👥 Tác giả
+Đồ án cuối kỳ môn Xử lý tiếng nói
+
+## 📝 License
+[MIT License hoặc license của bạn]
