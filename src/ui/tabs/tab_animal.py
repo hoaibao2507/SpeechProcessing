@@ -39,24 +39,24 @@ class AnimalTab(tk.Frame):
         frame_right.pack(side=tk.RIGHT, fill="both", expand=True, padx=5)
         
         # Cột trái: Ghi âm
-        lbl_record = tk.Label(frame_left, text="🎤 Ghi âm", font=("Arial", 9, "bold"))
+        lbl_record = tk.Label(frame_left, text="Ghi âm", font=("Arial", 9, "bold"))
         lbl_record.pack(pady=5)
         self.recorder = RecorderWidget(frame_left, output_file=self.output_file)
         self.recorder.pack()
         
         # Cột phải: Upload file
-        lbl_upload = tk.Label(frame_right, text="📁 Upload file", font=("Arial", 9, "bold"))
+        lbl_upload = tk.Label(frame_right, text="Upload file", font=("Arial", 9, "bold"))
         lbl_upload.pack(pady=5)
         
         btn_frame = tk.Frame(frame_right)
         btn_frame.pack(pady=5)
         
-        self.btn_upload = tk.Button(btn_frame, text="📂 Chọn file", 
+        self.btn_upload = tk.Button(btn_frame, text="Chọn file", 
                                     font=("Arial", 9), bg="#e0e0e0",
                                     command=self.on_upload_file)
         self.btn_upload.pack(side=tk.LEFT, padx=2)
         
-        self.btn_clear = tk.Button(btn_frame, text="✖ Xóa", 
+        self.btn_clear = tk.Button(btn_frame, text="Xóa", 
                                    font=("Arial", 9), bg="#ffcccc",
                                    command=self.on_clear_file, state=tk.DISABLED)
         self.btn_clear.pack(side=tk.LEFT, padx=2)
@@ -66,7 +66,7 @@ class AnimalTab(tk.Frame):
         self.lbl_file_name.pack(pady=5)
 
         # 3. Nút Nhận diện
-        self.btn_recognize = tk.Button(self, text="🔍 NHẬN DIỆN ÂM THANH", 
+        self.btn_recognize = tk.Button(self, text="NHẬN DIỆN ÂM THANH", 
                                       font=("Arial", 11, "bold"), bg="#ffcc80", fg="black",
                                       height=2,
                                       command=self.on_recognize)
@@ -117,7 +117,7 @@ class AnimalTab(tk.Frame):
         if file_path:
             self.uploaded_file = file_path
             file_name = os.path.basename(file_path)
-            self.lbl_file_name.config(text=f"✓ {file_name}", fg="green")
+            self.lbl_file_name.config(text=f"[OK] {file_name}", fg="green")
             self.btn_clear.config(state=tk.NORMAL)
             messagebox.showinfo("Thành công", f"Đã chọn file: {file_name}")
 
@@ -140,8 +140,8 @@ class AnimalTab(tk.Frame):
             return
         
         # Khóa nút và cập nhật UI
-        self.btn_recognize.config(state=tk.DISABLED, text="⏳ Đang nhận diện...")
-        self.lbl_main_result.config(text="⏳ Đang phân tích âm thanh...", fg="orange")
+        self.btn_recognize.config(state=tk.DISABLED, text="Đang nhận diện...")
+        self.lbl_main_result.config(text="Đang phân tích âm thanh...", fg="orange")
         self.lbl_confidence.config(text="")
         self.txt_topk.delete("1.0", tk.END)
         self.txt_topk.insert(tk.END, "Đang xử lý...\n")
@@ -158,11 +158,11 @@ class AnimalTab(tk.Frame):
 
     def _update_ui_result(self, result):
         # Mở lại nút
-        self.btn_recognize.config(state=tk.NORMAL, text="🔍 NHẬN DIỆN ÂM THANH")
+        self.btn_recognize.config(state=tk.NORMAL, text="NHẬN DIỆN ÂM THANH")
         
         if not result.get("success", False):
             error_msg = result.get("error", "Có lỗi xảy ra")
-            self.lbl_main_result.config(text=f"❌ Lỗi: {error_msg}", fg="red")
+            self.lbl_main_result.config(text=f"Lỗi: {error_msg}", fg="red")
             self.lbl_confidence.config(text="")
             self.txt_topk.delete("1.0", tk.END)
             messagebox.showerror("Lỗi", error_msg)
@@ -179,10 +179,10 @@ class AnimalTab(tk.Frame):
             
             # Kiểm tra xem có phải động vật không
             is_animal = result.get("is_animal", False)
-            emoji = "🐾" if is_animal else "🔊"
+            prefix = "[Động vật]" if is_animal else "[Âm thanh]"
             
             self.lbl_main_result.config(
-                text=f"{emoji} {label_vn}", 
+                text=f"{prefix} {label_vn}", 
                 fg="green" if is_animal else "blue"
             )
             self.lbl_confidence.config(text=f"Độ tin cậy: {confidence}")
@@ -197,9 +197,9 @@ class AnimalTab(tk.Frame):
                 label_vn = self._translate_label(label)
                 confidence = item["confidence"]
                 is_animal = self.engine._is_animal_label(label)
-                emoji = "🐾" if is_animal else "🔊"
+                prefix = "[Động vật]" if is_animal else "[Âm thanh]"
                 
-                self.txt_topk.insert(tk.END, f"{i}. {emoji} {label_vn} ({label})\n")
+                self.txt_topk.insert(tk.END, f"{i}. {prefix} {label_vn} ({label})\n")
                 self.txt_topk.insert(tk.END, f"   Độ tin cậy: {confidence}\n\n")
         else:
             self.txt_topk.insert(tk.END, "Không có kết quả")

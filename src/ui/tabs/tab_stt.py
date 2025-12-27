@@ -24,7 +24,7 @@ class STTTab(tk.Frame):
         self.recorder.pack(pady=10)
 
         # 3. Nút Chuyển đổi
-        self.btn_convert = tk.Button(self, text="⬇ Chuyển đổi sang Văn bản ⬇", 
+        self.btn_convert = tk.Button(self, text="Chuyển đổi sang Văn bản", 
                                      font=("Arial", 10), bg="#cceeff",
                                      command=self.on_stt_convert)
         self.btn_convert.pack(pady=10)
@@ -39,7 +39,7 @@ class STTTab(tk.Frame):
     def on_stt_convert(self):
         self.btn_convert.config(state=tk.DISABLED, text="Đang xử lý...")
         self.txt_result.delete("1.0", tk.END)
-        self.txt_result.insert(tk.END, "⏳ Đang phân tích âm thanh, vui lòng đợi...\n")
+        self.txt_result.insert(tk.END, "Đang phân tích âm thanh, vui lòng đợi...\n")
         
         threading.Thread(target=self._run_stt_thread).start()
 
@@ -50,4 +50,4 @@ class STTTab(tk.Frame):
     def _update_ui_result(self, text):
         self.txt_result.delete("1.0", tk.END)
         self.txt_result.insert(tk.END, text)
-        self.btn_convert.config(state=tk.NORMAL, text="⬇ Chuyển đổi sang Văn bản ⬇")
+        self.btn_convert.config(state=tk.NORMAL, text="Chuyển đổi sang Văn bản")

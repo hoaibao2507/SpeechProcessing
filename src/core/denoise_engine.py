@@ -76,7 +76,7 @@ class DenoiseEngine:
             if not os.path.exists(self.model_path):
                 raise FileNotFoundError(f"Không tìm thấy model tại: {self.model_path}")
 
-            print("⏳ Đang load model khử nhiễu...")
+            print("Đang load model khử nhiễu...")
             
             # Khởi tạo model từ class của bạn
             self.model = SpeechEnhancer()
@@ -87,10 +87,10 @@ class DenoiseEngine:
             self.model.to(self.device)
             self.model.eval()
             
-            print("✅ Model Lọc nhiễu đã sẵn sàng!")
+            print("Model Lọc nhiễu đã sẵn sàng!")
 
         except Exception as e:
-            print(f"❌ Lỗi load model Denoise: {e}")
+            print(f"Lỗi load model Denoise: {e}")
             import traceback
             traceback.print_exc()
 
@@ -102,7 +102,7 @@ class DenoiseEngine:
             return False, "Model chưa được load."
 
         try:
-            print(f"🎧 Đang xử lý file: {input_path}")
+            print(f"Đang xử lý file: {input_path}")
             
             # 1. Load Audio (Mặc định 16k cho các bài toán Speech)
             audio, sr = librosa.load(input_path, sr=16000)

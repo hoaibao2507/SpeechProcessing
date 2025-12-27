@@ -36,7 +36,7 @@ class DenoiseTab(tk.Frame):
         self.recorder.pack()
 
         # --- PHẦN 2: NÚT XỬ LÝ ---
-        self.btn_process = tk.Button(self, text="⚡ CHẠY KHỬ NHIỄU (AI) ⚡", 
+        self.btn_process = tk.Button(self, text="CHẠY KHỬ NHIỄU (AI)", 
                                      font=("Arial", 11, "bold"), bg="#ffcc80", fg="black",
                                      height=2,
                                      command=self.on_process)
@@ -50,7 +50,7 @@ class DenoiseTab(tk.Frame):
         self.lbl_status.pack(pady=5)
 
         # Nút nghe lại file sạch
-        self.btn_play_clean = tk.Button(frame_output, text="▶ Nghe giọng đã lọc nhiễu", 
+        self.btn_play_clean = tk.Button(frame_output, text="Nghe giọng đã lọc nhiễu", 
                                         font=("Arial", 10), bg="#99ff99",
                                         state=tk.DISABLED, command=self.play_output)
         self.btn_play_clean.pack(pady=10)
@@ -62,7 +62,7 @@ class DenoiseTab(tk.Frame):
             return
 
         # Khóa nút bấm để tránh bấm nhiều lần
-        self.btn_process.config(state=tk.DISABLED, text="⏳ Đang xử lý... (Vui lòng đợi)")
+        self.btn_process.config(state=tk.DISABLED, text="Đang xử lý... (Vui lòng đợi)")
         self.lbl_status.config(text="AI đang tách tiếng ồn...", fg="red")
         
         # Chạy xử lý trong luồng riêng (Thread) để không đơ ứng dụng
@@ -77,14 +77,14 @@ class DenoiseTab(tk.Frame):
 
     def _on_process_finished(self, success, message):
         # Mở lại nút bấm
-        self.btn_process.config(state=tk.NORMAL, text="⚡ CHẠY KHỬ NHIỄU (AI) ⚡")
+        self.btn_process.config(state=tk.NORMAL, text="CHẠY KHỬ NHIỄU (AI)")
         
         if success:
-            self.lbl_status.config(text="✅ Đã lọc xong! Hãy nghe thử bên dưới.", fg="green")
+            self.lbl_status.config(text="Đã lọc xong! Hãy nghe thử bên dưới.", fg="green")
             self.btn_play_clean.config(state=tk.NORMAL) # Mở nút nghe
             messagebox.showinfo("Thành công", message)
         else:
-            self.lbl_status.config(text=f"❌ Lỗi: {message}", fg="red")
+            self.lbl_status.config(text=f"Lỗi: {message}", fg="red")
             messagebox.showerror("Lỗi", message)
 
     def play_output(self):
@@ -93,7 +93,7 @@ class DenoiseTab(tk.Frame):
                 messagebox.showerror("Lỗi", "Không tìm thấy file kết quả.")
                 return
             
-            self.lbl_status.config(text="🔊 Đang phát...", fg="green")
+            self.lbl_status.config(text="Đang phát...", fg="green")
             self.update() # Cập nhật UI ngay
             
             # Đọc và phát file
@@ -101,6 +101,6 @@ class DenoiseTab(tk.Frame):
             sd.play(data, fs)
             sd.wait()
             
-            self.lbl_status.config(text="✅ Đã phát xong.", fg="green")
+            self.lbl_status.config(text="Đã phát xong.", fg="green")
         except Exception as e:
             messagebox.showerror("Lỗi phát âm thanh", f"{e}")

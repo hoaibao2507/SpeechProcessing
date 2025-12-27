@@ -28,7 +28,7 @@ class STTEngine:
             if not os.path.exists(self.model_path):
                 raise FileNotFoundError(f"Không tìm thấy thư mục model tại: {self.model_path}")
 
-            print(f"⏳ Đang load model từ: {self.model_path}")
+            print(f"Đang load model từ: {self.model_path}")
 
             # Load model thủ công để kiểm soát tốt hơn
             # Bước 1: Load Processor
@@ -47,10 +47,10 @@ class STTEngine:
                 device=self.device_id # Pipeline thì vẫn dùng số (-1 hoặc 0)
             )
             
-            print("✅ Model STT đã sẵn sàng!")
+            print("Model STT đã sẵn sàng!")
             
         except Exception as e:
-            print(f"❌ Lỗi load model STT: {e}")
+            print(f"Lỗi load model STT: {e}")
             self.transcriber = None
 
     def predict(self, audio_path):
@@ -66,7 +66,7 @@ class STTEngine:
             return "Lỗi: Không tìm thấy file âm thanh."
 
         try:
-            print(f"🎧 Đang xử lý file: {audio_path}")
+            print(f"Đang xử lý file: {audio_path}")
             
             # --- BƯỚC XỬ LÝ ÂM THANH (Giống code Colab của bạn) ---
             # Load file và ép về 16kHz (yêu cầu của Whisper)
@@ -83,7 +83,7 @@ class STTEngine:
             return text
 
         except Exception as e:
-            print(f"❌ Lỗi dự đoán: {e}")
+            print(f"Lỗi dự đoán: {e}")
             return f"Có lỗi xảy ra khi xử lý: {str(e)}"
 
 # Đoạn code dưới đây chỉ chạy khi bạn test file này trực tiếp

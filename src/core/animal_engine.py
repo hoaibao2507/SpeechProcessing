@@ -31,7 +31,7 @@ class AnimalEngine:
             if not os.path.exists(self.model_path):
                 raise FileNotFoundError(f"Không tìm thấy thư mục model tại: {self.model_path}")
 
-            print(f"⏳ Đang load model AST từ: {self.model_path}")
+            print(f"Đang load model AST từ: {self.model_path}")
 
             # Load processor
             self.processor = AutoProcessor.from_pretrained(self.model_path)
@@ -51,13 +51,13 @@ class AnimalEngine:
                 if hasattr(self.model.config, 'id2label'):
                     self.label_map = {"id2label": {str(k): v for k, v in self.model.config.id2label.items()}}
                 else:
-                    print("⚠️ Cảnh báo: Không tìm thấy label_map.json")
+                    print("Cảnh báo: Không tìm thấy label_map.json")
                     self.label_map = None
             
-            print("✅ Model Animal Recognition đã sẵn sàng!")
+            print("Model Animal Recognition đã sẵn sàng!")
             
         except Exception as e:
-            print(f"❌ Lỗi load model Animal: {e}")
+            print(f"Lỗi load model Animal: {e}")
             import traceback
             traceback.print_exc()
             self.model = None
@@ -82,7 +82,7 @@ class AnimalEngine:
             }
 
         try:
-            print(f"🎧 Đang xử lý file: {audio_path}")
+            print(f"Đang xử lý file: {audio_path}")
             
             # Load audio file (AST thường yêu cầu 16kHz)
             audio_array, sampling_rate = librosa.load(audio_path, sr=16000)
@@ -131,7 +131,7 @@ class AnimalEngine:
             }
 
         except Exception as e:
-            print(f"❌ Lỗi dự đoán: {e}")
+            print(f"Lỗi dự đoán: {e}")
             import traceback
             traceback.print_exc()
             return {
