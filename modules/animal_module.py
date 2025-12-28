@@ -7,6 +7,8 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.core.animal_engine import AnimalEngine
 from src.utils.audio_helper import AudioRecorder
+from src.utils.audio_visualizer import get_wavesurfer_html
+import streamlit.components.v1 as components
 
 # Khởi tạo engine (cache để không load lại mỗi lần)
 @st.cache_resource
@@ -148,6 +150,21 @@ def show():
             st.success(f"✅ Đã tải: {uploaded_file.name}")
         else:
             st.session_state.animal_uploaded_file = None
+    
+    # Hiển thị waveform nếu có file audio
+    audio_file_to_show = None
+    if st.session_state.get('animal_uploaded_file') and os.path.exists(st.session_state.animal_uploaded_file):
+        audio_file_to_show = st.session_state.animal_uploaded_file
+    elif os.path.exists(output_file):
+        audio_file_to_show = output_file
+    
+    if audio_file_to_show:
+        st.subheader("📊 Sóng âm")
+        try:
+            html = get_wavesurfer_html(audio_file_to_show, wave_color='#1e90ff', progress_color='#0066cc', height=120)
+            components.html(html, height=200)
+        except Exception as e:
+            st.warning(f"Không thể hiển thị waveform: {e}")
     
     st.markdown("---")
     

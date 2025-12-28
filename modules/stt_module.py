@@ -8,6 +8,8 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.core.stt_engine import STTEngine
 from src.utils.audio_helper import AudioRecorder
+from src.utils.audio_visualizer import get_wavesurfer_html
+import streamlit.components.v1 as components
 
 # Khởi tạo engine cho tiếng Việt (cache để không load lại mỗi lần)
 @st.cache_resource
@@ -97,6 +99,14 @@ def show():
         st.info("🔴 Đang ghi âm...")
     elif os.path.exists(output_file):
         st.success("✅ Đã có file ghi âm")
+        
+        # Hiển thị waveform với WaveSurfer
+        st.subheader("📊 Sóng âm")
+        try:
+            html = get_wavesurfer_html(output_file, wave_color='#1e90ff', progress_color='#0066cc', height=120)
+            components.html(html, height=200)
+        except Exception as e:
+            st.warning(f"Không thể hiển thị waveform: {e}")
     
     st.markdown("---")
     

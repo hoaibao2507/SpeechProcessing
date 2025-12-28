@@ -9,6 +9,8 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.core.denoise_engine import DenoiseEngine
 from src.utils.audio_helper import AudioRecorder
+from src.utils.audio_visualizer import get_wavesurfer_html, get_wavesurfer_comparison_html
+import streamlit.components.v1 as components
 
 # Khởi tạo engine (cache để không load lại mỗi lần)
 @st.cache_resource
@@ -73,6 +75,14 @@ def show():
         st.info("🔴 Đang ghi âm...")
     elif os.path.exists(input_file):
         st.success("✅ Đã có file ghi âm")
+        
+        # Hiển thị waveform của file gốc với WaveSurfer
+        st.subheader("📊 Sóng âm - File gốc")
+        try:
+            html = get_wavesurfer_html(input_file, wave_color='#ff7f0e', progress_color='#cc6600', height=100)
+            components.html(html, height=180)
+        except Exception as e:
+            st.warning(f"Không thể hiển thị waveform: {e}")
     
     st.markdown("---")
     
@@ -103,6 +113,24 @@ def show():
     
     if st.session_state.get('denoise_success', False) and os.path.exists(output_file):
         st.success("✅ Đã lọc xong! Hãy nghe thử bên dưới.")
+        
+        # Hiển thị waveform so sánh với WaveSurfer
+        st.subheader("📊 So sánh sóng âm")
+        try:
+            html = get_wavesurfer_comparison_html(
+                input_file, 
+                output_file,
+                title1="Audio gốc (có nhiễu)",
+                title2="Audio đã lọc nhiễu",
+                wave_color1='#ff7f0e',
+                progress_color1='#cc6600',
+                wave_color2='#2ca02c',
+                progress_color2='#1e7e1e',
+                height=100
+            )
+            components.html(html, height=500)
+        except Exception as e:
+            st.warning(f"Không thể hiển thị waveform: {e}")
         
         if st.button("🔊 Nghe giọng đã lọc nhiễu", use_container_width=True, type="primary"):
             try:
