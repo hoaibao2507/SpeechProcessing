@@ -118,7 +118,7 @@ def show_intro():
             <h3>Thành viên:</h3>
             <div class="member-item">
                 <strong>Dương Nguyễn Hoài Bảo - 22110283</strong> <br>
-                <strong>Phạm Quốc Long - 22520862</strong> <br>
+                <strong>Phạm Quốc Long - 22110366</strong> <br>
                 <strong>Vi Quốc Thuận - 22110006</strong> <br>
             </div>
         </div>
