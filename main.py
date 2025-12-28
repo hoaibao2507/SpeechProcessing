@@ -75,16 +75,16 @@ with st.sidebar:
     st.image(logo, width=128)
 
     st.markdown("### Speech Processing")
-    if st.button("⭐ GIỚI THIỆU"):
+    if st.button("GIỚI THIỆU"):
         st.query_params.clear()
         st.query_params.update({"menu": "GioiThieu"})
-    if st.button("🎤 CHUYỂN ĐỔI GIỌNG NÓI"):
+    if st.button("CHUYỂN ĐỔI GIỌNG NÓI"):
         st.query_params.clear()
         st.query_params.update({"menu": "STT"})
-    if st.button("🔇 LỌC NHIỄU"):
+    if st.button("LỌC NHIỄU"):
         st.query_params.clear()
         st.query_params.update({"menu": "Denoise"})
-    if st.button("🐾 NHẬN DIỆN ĐỘNG VẬT"):
+    if st.button("NHẬN DIỆN ĐỘNG VẬT"):
         st.query_params.clear()
         st.query_params.update({"menu": "Animal"})
 
@@ -170,16 +170,31 @@ section[data-testid="stSidebar"] [data-testid="stImage"] img {
     margin-right: auto !important;
 }
 
-/* Style cho nút trong sidebar - sát viền và responsive */
-section[data-testid="stSidebar"] button[data-testid="stBaseButton"] {
+/* Nền đen cho sidebar */
+section[data-testid="stSidebar"] {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+}
+
+section[data-testid="stSidebar"] * {
+    color: #ffffff !important;
+}
+
+/* Style cho nút trong sidebar - màu xanh ngọc dương */
+section[data-testid="stSidebar"] button[data-testid="stBaseButton"],
+section[data-testid="stSidebar"] button[data-testid="stBaseButton-secondary"],
+section[data-testid="stSidebar"] button {
     width: 100% !important;
     min-width: 100% !important;
     max-width: 100% !important;
-    background: linear-gradient(to right, rgba(0, 80, 200, 0.7), rgba(0, 180, 200, 0.7)) !important;
-    border: 1px solid white !important;
+    background-color: #00CED1 !important;
+    background: #00CED1 !important;
+    border: 1px solid #00CED1 !important;
     padding: 10px 0 !important;
     border-radius: 10px !important;
     font-size: 16px !important;
+    font-weight: 500 !important;
+    color: #ffffff !important;
     transition: all 0.3s ease !important;
     box-sizing: border-box !important;
     margin: 5px 0 !important;
@@ -190,11 +205,31 @@ section[data-testid="stSidebar"] button[data-testid="stBaseButton"] {
     cursor: pointer !important;
 }
 
-button[data-testid="stBaseButton"]:hover {
-    background: linear-gradient(to right, rgba(0, 80, 200, 0.9), rgba(0, 180, 200, 0.9)) !important;
-    transform: scale(1.05);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    cursor: pointer;
+section[data-testid="stSidebar"] button[data-testid="stBaseButton"]:hover,
+section[data-testid="stSidebar"] button[data-testid="stBaseButton-secondary"]:hover,
+section[data-testid="stSidebar"] button:hover {
+    background-color: #20B2AA !important;
+    background: #20B2AA !important;
+    border-color: #20B2AA !important;
+    transform: scale(1.05) !important;
+    box-shadow: 0 4px 8px rgba(0, 206, 209, 0.4) !important;
+    cursor: pointer !important;
+}
+
+/* Override tất cả button trong sidebar với màu xanh ngọc dương */
+section[data-testid="stSidebar"] .stButton > button,
+section[data-testid="stSidebar"] .stButton > button[data-testid="stBaseButton"],
+section[data-testid="stSidebar"] .stButton > button[data-testid="stBaseButton-secondary"] {
+    background-color: #00CED1 !important;
+    background: #00CED1 !important;
+    border-color: #00CED1 !important;
+    color: #ffffff !important;
+}
+
+section[data-testid="stSidebar"] .stButton > button:hover {
+    background-color: #20B2AA !important;
+    background: #20B2AA !important;
+    border-color: #20B2AA !important;
 }
 
 button[data-testid="stBaseButton-secondary"] {
