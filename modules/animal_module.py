@@ -196,7 +196,7 @@ def show():
                 prefix = "[Động vật]" if is_animal else "[Âm thanh]"
                 
                 st.markdown(f"### {prefix} {label_vn}")
-                st.markdown(f"**Độ tin cậy:** {confidence:.2%}")
+                st.markdown(f"**Độ tin cậy:** {confidence}")
             
             # Top K results
             st.markdown("#### Top 5 kết quả:")
@@ -211,7 +211,7 @@ def show():
                     prefix = "[Động vật]" if is_animal else "[Âm thanh]"
                     
                     with st.expander(f"{i}. {prefix} {label_vn} ({label})"):
-                        st.write(f"**Độ tin cậy:** {confidence:.2%}")
+                        st.write(f"**Độ tin cậy:** {confidence}")
     else:
         st.info("Chưa có kết quả. Hãy ghi âm/upload file và nhấn nút nhận diện.")
 

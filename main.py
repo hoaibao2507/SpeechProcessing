@@ -268,6 +268,38 @@ div[data-testid="stMainBlockContainer"] {
     border-radius: 15px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
+
+/* Làm text trong phần kết quả đậm hơn */
+textarea[data-testid="stTextArea"] {
+    color: #1a1a1a !important;
+    font-weight: 500 !important;
+    font-size: 16px !important;
+}
+
+/* Làm text trong textarea đậm hơn */
+div[data-testid="stTextArea"] textarea {
+    color: #1a1a1a !important;
+    font-weight: 500 !important;
+    font-size: 16px !important;
+}
+
+/* Làm label "Văn bản đã chuyển đổi" đậm hơn */
+div[data-testid="stTextArea"] label {
+    color: #1a1a1a !important;
+    font-weight: 600 !important;
+    font-size: 16px !important;
+}
+
+/* Làm subheader "Kết quả nhận diện" đậm hơn */
+h3[data-testid="stHeader"] {
+    color: #1a1a1a !important;
+    font-weight: 700 !important;
+}
+
+/* Làm tất cả text trong phần kết quả đậm hơn */
+div[data-testid="stTextArea"] * {
+    color: #1a1a1a !important;
+}
 </style>
 """
 st.markdown(page_bg, unsafe_allow_html=True)
