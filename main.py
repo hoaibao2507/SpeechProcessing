@@ -12,62 +12,133 @@ st.set_page_config(page_title="Ứng dụng xử lý tiếng nói", layout="wide
 
 # --- Định nghĩa các hàm trang ---
 def show_intro():
-    st.title("🎤 Ứng dụng Xử lý Tiếng nói")
-    st.markdown("---")
+    # Thêm class để nhận diện trang giới thiệu
+    st.markdown('<div class="intro-page">', unsafe_allow_html=True)
     
-    st.markdown("""
-    ## 📋 Mô tả
-    Ứng dụng xử lý tiếng nói với giao diện web được xây dựng bằng Python và Streamlit. 
-    Dự án cung cấp các chức năng chính: chuyển đổi giọng nói sang văn bản (Speech-to-Text), 
-    lọc nhiễu âm thanh (Audio Denoising) và nhận diện âm thanh động vật.
+    html_code = """
+    <div style="font-family: Arial, sans-serif; text-align: center; margin-top: 0; padding-top: 0;">
+        <h2 style="color: #FFFFFF; margin: 0; padding: 0;">BÁO CÁO CUỐI KỲ</h2>
+        <h1 style="color: #FFFFFF; margin: 0; padding: 0;">MÔN XỬ LÝ TIẾNG NÓI</h1>
+    </div>
+    """
+    st.markdown(html_code, unsafe_allow_html=True)
     
-    ## ✨ Các chức năng
+    page_bg = """
+    <style>
+    .members {
+        padding: 1em;
+        background-color: transparent;
+        border-radius: 8px;
+        text-align: center;
+        font-size: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .members h3 {
+        font-size: 26px;
+        color: #FFFFFF;
+    }
+    .member-item {
+        margin-bottom: 0.5em;
+        color: #FFFFFF;
+        font-size: 22px;
+    }
+    .description {
+        padding: 1em;
+        background-color: transparent;
+        text-align: center;
+        color: #FFFFFF;
+        font-size: 18px;
+        line-height: 1.8;
+    }
+    .description h3 {
+        color: #FFFFFF;
+        font-size: 24px;
+        margin-top: 1.5em;
+        margin-bottom: 0.5em;
+    }
+    .description ul {
+        text-align: left;
+        display: inline-block;
+        color: #FFFFFF;
+    }
+    .description li {
+        margin-bottom: 0.5em;
+        color: #FFFFFF;
+    }
+    .features-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        padding: 10px 0;
+        margin-top: 0;
+    }
+    .feature-card {
+        background: rgba(255, 255, 255, 0.1);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 15px;
+        padding: 25px;
+        text-align: center;
+        color: #FFFFFF;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        min-height: 150px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.5);
+    }
+    .feature-card h4 {
+        color: #FFFFFF;
+        font-size: 20px;
+        margin: 0 0 15px 0;
+        font-weight: bold;
+    }
+    .feature-card p {
+        color: #FFFFFF;
+        font-size: 16px;
+        margin: 0;
+        line-height: 1.6;
+    }
+    </style>
+    """
+    st.markdown(page_bg, unsafe_allow_html=True)
     
-    ### 1. 🎤 Chuyển đổi giọng nói sang văn bản (Speech-to-Text)
-    - Ghi âm giọng nói trực tiếp từ microphone
-    - Chuyển đổi giọng nói tiếng Việt thành văn bản
-    - Sử dụng mô hình Whisper đã được fine-tune cho tiếng Việt
-    - Hỗ trợ GPU (CUDA) để tăng tốc xử lý
+    with st.container():
+        st.markdown("""
+        <div class="members" style="margin-top: 5px;">
+            <h3>Thành viên:</h3>
+            <div class="member-item">
+                <strong>Speech Processing Team</strong>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
     
-    ### 2. 🔇 Lọc nhiễu âm thanh (Audio Denoising)
-    - Ghi âm trong môi trường có nhiễu
-    - Sử dụng mô hình Deep Learning (CNN + LSTM) để loại bỏ nhiễu
-    - Nghe lại âm thanh đã được xử lý
-    - Cải thiện chất lượng âm thanh bằng AI
-    
-    ### 3. 🐾 Nhận diện Âm thanh Động vật (Animal Recognition)
-    - Ghi âm tiếng kêu của động vật hoặc các loại âm thanh khác
-    - Sử dụng mô hình AST (Audio Spectrogram Transformer) với độ chính xác 96%
-    - Hiển thị kết quả nhận diện với độ tin cậy (confidence)
-    - Hiển thị top 5 kết quả có khả năng nhất
-    - Nhận diện được nhiều loại động vật: chó, mèo, gà, bò, lợn, cừu, ếch, quạ, chim, dế, côn trùng
-    - Cũng có thể nhận diện các âm thanh khác: máy bay, tàu hỏa, mưa, gió, v.v.
-    
-    ## 🚀 Hướng dẫn sử dụng
-    
-    ### Chuyển đổi giọng nói sang văn bản
-    1. Chọn menu "🎤 CHUYỂN ĐỔI GIỌNG NÓI" ở sidebar
-    2. Nhấn nút "Bắt đầu Ghi âm"
-    3. Nói vào microphone
-    4. Nhấn "Dừng" khi hoàn tất
-    5. Nhấn "Chuyển đổi sang Văn bản" để xem kết quả
-    
-    ### Lọc nhiễu âm thanh
-    1. Chọn menu "🔇 LỌC NHIỄU" ở sidebar
-    2. Tạo môi trường có nhiễu (bật quạt, TV, v.v.)
-    3. Nhấn "Bắt đầu Ghi âm" và nói
-    4. Nhấn "Dừng" khi hoàn tất
-    5. Nhấn "CHẠY KHỬ NHIỄU (AI)" để xử lý
-    6. Nhấn "Nghe giọng đã lọc nhiễu" để kiểm tra kết quả
-    
-    ### Nhận diện âm thanh động vật
-    1. Chọn menu "🐾 NHẬN DIỆN ĐỘNG VẬT" ở sidebar
-    2. Nhấn "Bắt đầu Ghi âm" hoặc upload file âm thanh
-    3. Ghi âm tiếng kêu của động vật (chó, mèo, gà, v.v.) hoặc các âm thanh khác
-    4. Nhấn "Dừng" khi hoàn tất
-    5. Nhấn "NHẬN DIỆN ÂM THANH" để xem kết quả
-    6. Xem kết quả chính và top 5 kết quả có khả năng nhất
-    """)
+    with st.container():
+        st.markdown("""
+        <div style="text-align: center; margin: 10px 0 20px 0;">
+            <h3 style="color: #FFFFFF; font-size: 28px; margin-bottom: 15px;">CÁC CHỨC NĂNG</h3>
+        </div>
+        <div class="features-container">
+            <div class="feature-card">
+                <h4>🎤 Chuyển đổi giọng nói sang văn bản</h4>
+                <p>Ghi âm và chuyển đổi giọng nói tiếng Việt thành văn bản sử dụng mô hình Whisper</p>
+            </div>
+            <div class="feature-card">
+                <h4>🔇 Lọc nhiễu âm thanh</h4>
+                <p>Sử dụng mô hình Deep Learning (CNN + LSTM) để loại bỏ nhiễu và cải thiện chất lượng âm thanh</p>
+            </div>
+            <div class="feature-card">
+                <h4>🐾 Nhận diện Âm thanh Động vật</h4>
+                <p>Sử dụng mô hình AST với độ chính xác 96% để nhận diện tiếng kêu động vật và các loại âm thanh khác</p>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
 # --- Sidebar ---
 with st.sidebar:
@@ -262,11 +333,39 @@ section[data-testid="stMain"] {
     padding: 20px;
 }
 
-/* Nền xám trắng cho vùng nội dung bên trong */
-div[data-testid="stMainBlockContainer"] {
+/* Nền xám trắng cho vùng nội dung bên trong - chỉ khi không phải trang giới thiệu */
+div[data-testid="stMainBlockContainer"]:not(:has(.intro-page)):not(:has(h2[style*="BÁO CÁO"])) {
     background: rgba(245, 245, 250, 0.95) !important;
     border-radius: 15px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Bỏ nền xám cho trang giới thiệu và đẩy lên cao */
+div[data-testid="stMainBlockContainer"]:has(.intro-page),
+div[data-testid="stMainBlockContainer"]:has(h2[style*="BÁO CÁO"]) {
+    background: transparent !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+/* Đẩy nội dung trang giới thiệu lên cao */
+.intro-page {
+    background: transparent !important;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+/* Giảm margin của các phần tử đầu tiên trong trang giới thiệu */
+.intro-page > div:first-child {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+/* Đảm bảo tất cả nội dung trong trang giới thiệu không có nền */
+.intro-page {
+    background: transparent !important;
 }
 
 /* Làm text trong phần kết quả đậm hơn */
