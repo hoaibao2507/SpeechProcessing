@@ -60,50 +60,81 @@ def show():
     if 'stt_recorder' not in st.session_state:
         st.session_state.stt_recorder = AudioRecorder(filename=output_file)
         st.session_state.stt_recording = False
+        st.session_state.stt_uploaded_file = None
     
     recorder = st.session_state.stt_recorder
     
-    # Phần ghi âm
-    st.subheader("📹 Ghi âm")
+    # Phần chọn nguồn âm thanh
+    st.subheader("📹 Chọn nguồn âm thanh")
+    st.info("💡 Ghi âm hoặc upload file âm thanh để chuyển đổi")
     
-    col1, col2, col3 = st.columns(3)
+    col1, col2 = st.columns(2)
     
     with col1:
-        if st.button("▶️ Bắt đầu Ghi âm", use_container_width=True, type="primary"):
-            try:
-                recorder.start_recording()
-                st.session_state.stt_recording = True
-                st.success("Đang ghi âm...")
-            except Exception as e:
-                st.error(f"Lỗi: {e}")
+        st.markdown("#### 🎤 Ghi âm")
+        col1_1, col1_2, col1_3 = st.columns(3)
+        
+        with col1_1:
+            if st.button("▶️ Bắt đầu", key="stt_start", use_container_width=True, type="primary"):
+                try:
+                    recorder.start_recording()
+                    st.session_state.stt_recording = True
+                    st.success("Đang ghi âm...")
+                except Exception as e:
+                    st.error(f"Lỗi: {e}")
+        
+        with col1_2:
+            if st.button("⏹️ Dừng", key="stt_stop", use_container_width=True, disabled=not st.session_state.get('stt_recording', False)):
+                try:
+                    recorder.stop_recording()
+                    st.session_state.stt_recording = False
+                    st.success("Đã ghi xong!")
+                except Exception as e:
+                    st.error(f"Lỗi: {e}")
+        
+        with col1_3:
+            if st.button("🔊 Nghe", key="stt_play", use_container_width=True, disabled=not os.path.exists(output_file)):
+                try:
+                    recorder.play_recording()
+                    st.success("Đã phát xong!")
+                except Exception as e:
+                    st.error(f"Lỗi: {e}")
+        
+        if st.session_state.get('stt_recording', False):
+            st.info("🔴 Đang ghi âm...")
+        elif os.path.exists(output_file):
+            st.success("✅ Đã có file ghi âm")
     
     with col2:
-        if st.button("⏹️ Dừng", use_container_width=True, disabled=not st.session_state.get('stt_recording', False)):
-            try:
-                recorder.stop_recording()
-                st.session_state.stt_recording = False
-                st.success("Đã ghi xong!")
-            except Exception as e:
-                st.error(f"Lỗi: {e}")
-    
-    with col3:
-        if st.button("🔊 Nghe lại", use_container_width=True, disabled=not os.path.exists(output_file)):
-            try:
-                recorder.play_recording()
-                st.success("Đã phát xong!")
-            except Exception as e:
-                st.error(f"Lỗi: {e}")
-    
-    # Hiển thị trạng thái
-    if st.session_state.get('stt_recording', False):
-        st.info("🔴 Đang ghi âm...")
-    elif os.path.exists(output_file):
-        st.success("✅ Đã có file ghi âm")
+        st.markdown("#### 📁 Upload file")
+        uploaded_file = st.file_uploader(
+            "Chọn file âm thanh",
+            type=['wav', 'mp3', 'flac', 'ogg', 'm4a'],
+            key="stt_upload"
+        )
         
-        # Hiển thị waveform với WaveSurfer
+        if uploaded_file is not None:
+            # Lưu file tạm
+            temp_path = f"recordings/temp_{uploaded_file.name}"
+            os.makedirs(os.path.dirname(temp_path), exist_ok=True)
+            with open(temp_path, "wb") as f:
+                f.write(uploaded_file.getbuffer())
+            st.session_state.stt_uploaded_file = temp_path
+            st.success(f"✅ Đã tải: {uploaded_file.name}")
+        else:
+            st.session_state.stt_uploaded_file = None
+    
+    # Hiển thị waveform nếu có file audio
+    audio_file_to_show = None
+    if st.session_state.get('stt_uploaded_file') and os.path.exists(st.session_state.stt_uploaded_file):
+        audio_file_to_show = st.session_state.stt_uploaded_file
+    elif os.path.exists(output_file):
+        audio_file_to_show = output_file
+    
+    if audio_file_to_show:
         st.subheader("📊 Sóng âm")
         try:
-            html = get_wavesurfer_html(output_file, wave_color='#1e90ff', progress_color='#0066cc', height=120)
+            html = get_wavesurfer_html(audio_file_to_show, wave_color='#1e90ff', progress_color='#0066cc', height=120)
             components.html(html, height=200)
         except Exception as e:
             st.warning(f"Không thể hiển thị waveform: {e}")
@@ -112,12 +143,20 @@ def show():
     
     # Nút chuyển đổi
     if st.button("🔄 Chuyển đổi sang Văn bản", use_container_width=True, type="primary"):
-        if not os.path.exists(output_file):
-            st.warning("Vui lòng ghi âm trước!")
+        # Xác định file nào sẽ được sử dụng (ưu tiên file upload)
+        audio_file = None
+        
+        if st.session_state.get('stt_uploaded_file') and os.path.exists(st.session_state.stt_uploaded_file):
+            audio_file = st.session_state.stt_uploaded_file
+        elif os.path.exists(output_file):
+            audio_file = output_file
         else:
+            st.warning("Vui lòng ghi âm hoặc upload file âm thanh trước!")
+        
+        if audio_file:
             with st.spinner("Đang phân tích âm thanh, vui lòng đợi..."):
                 try:
-                    result_text = engine.predict(output_file, language=lang_code)
+                    result_text = engine.predict(audio_file, language=lang_code)
                     st.session_state.stt_result = result_text
                 except Exception as e:
                     st.error(f"Lỗi xử lý: {e}")
