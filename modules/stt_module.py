@@ -16,7 +16,7 @@ def get_stt_engine():
     return STTEngine(model_path=model_path)
 
 def show():
-    st.title("CHUYỂN ĐỔI GIỌNG NÓI SANG VĂN BẢN")
+    st.title("🗣️ CHUYỂN ĐỔI GIỌNG NÓI SANG VĂN BẢN")
     st.markdown("---")
     
     # Khởi tạo engine

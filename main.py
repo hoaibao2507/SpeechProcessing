@@ -75,8 +75,8 @@ def show_intro():
         margin-top: 0;
     }
     .feature-card {
-        background: rgba(255, 255, 255, 0.1);
-        border: 2px solid rgba(255, 255, 255, 0.3);
+        background: rgba(30, 144, 255, 0.8);
+        border: 2px solid rgba(30, 144, 255, 1);
         border-radius: 15px;
         padding: 25px;
         text-align: center;
@@ -90,14 +90,17 @@ def show_intro():
     }
     .feature-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 8px 20px rgba(255, 255, 255, 0.2);
-        border-color: rgba(255, 255, 255, 0.5);
+        box-shadow: 0 8px 20px rgba(30, 144, 255, 0.5);
+        border-color: rgba(0, 100, 200, 1);
+        background: rgba(30, 144, 255, 0.95);
     }
     .feature-card h4 {
         color: #FFFFFF;
         font-size: 20px;
         margin: 0 0 15px 0;
         font-weight: bold;
+        text-align: center;
+        width: 100%;
     }
     .feature-card p {
         color: #FFFFFF;
@@ -114,7 +117,9 @@ def show_intro():
         <div class="members" style="margin-top: 5px;">
             <h3>Thành viên:</h3>
             <div class="member-item">
-                <strong>Speech Processing Team</strong>
+                <strong>Dương Nguyễn Hoài Bảo - 22110283</strong> <br>
+                <strong>Phạm Quốc Long - 22520862</strong> <br>
+                <strong>Vi Quốc Thuận - 22110006</strong> <br>
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -126,16 +131,13 @@ def show_intro():
         </div>
         <div class="features-container">
             <div class="feature-card">
-                <h4>🎤 Chuyển đổi giọng nói sang văn bản</h4>
-                <p>Ghi âm và chuyển đổi giọng nói tiếng Việt thành văn bản sử dụng mô hình Whisper</p>
+                <h4>CHUYỂN ĐỔI GIỌNG NÓI SANG VĂN BẢN</h4>
             </div>
             <div class="feature-card">
-                <h4>🔇 Lọc nhiễu âm thanh</h4>
-                <p>Sử dụng mô hình Deep Learning (CNN + LSTM) để loại bỏ nhiễu và cải thiện chất lượng âm thanh</p>
+                <h4>LỌC NHIỄU ÂM THANH</h4>
             </div>
             <div class="feature-card">
-                <h4>🐾 Nhận diện Âm thanh Động vật</h4>
-                <p>Sử dụng mô hình AST với độ chính xác 96% để nhận diện tiếng kêu động vật và các loại âm thanh khác</p>
+                <h4>NHẬN DIỆN ÂM THANH ĐỘNG VẬT</h4>
             </div>
         </div>
         """, unsafe_allow_html=True)
