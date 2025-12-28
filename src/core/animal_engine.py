@@ -141,7 +141,7 @@ class AnimalEngine:
 
     def _is_animal_label(self, label):
         """
-        Kiểm tra xem label có phải là động vật không.
+        Kiểm tra xem label có phải là âm thanh không.
         """
         animal_labels = [
             "dog", "cat", "sheep", "cow", "pig", "hen", "rooster", 

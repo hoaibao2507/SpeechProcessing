@@ -137,7 +137,7 @@ def show_intro():
                 <h4>LỌC NHIỄU ÂM THANH</h4>
             </div>
             <div class="feature-card">
-                <h4>NHẬN DIỆN ÂM THANH ĐỘNG VẬT</h4>
+                <h4>NHẬN DIỆN ÂM THANH</h4>
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -157,7 +157,7 @@ with st.sidebar:
     if st.button("LỌC NHIỄU"):
         st.query_params.clear()
         st.query_params.update({"menu": "Denoise"})
-    if st.button("NHẬN DIỆN ĐỘNG VẬT"):
+    if st.button("NHẬN DIỆN ÂM THANH"):
         st.query_params.clear()
         st.query_params.update({"menu": "Animal"})
 

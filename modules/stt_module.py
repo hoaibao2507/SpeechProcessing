@@ -9,18 +9,46 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from src.core.stt_engine import STTEngine
 from src.utils.audio_helper import AudioRecorder
 
-# Khởi tạo engine (cache để không load lại mỗi lần)
+# Khởi tạo engine cho tiếng Việt (cache để không load lại mỗi lần)
 @st.cache_resource
-def get_stt_engine():
+def get_stt_engine_vn():
     model_path = "models/speech_to_text/speech-to-text-vn/whisper-vivos-final"
+    return STTEngine(model_path=model_path)
+
+# Khởi tạo engine cho tiếng Anh (cache để không load lại mỗi lần)
+@st.cache_resource
+def get_stt_engine_en():
+    # Sử dụng model mới đã fine-tune cho tiếng Anh (checkpoint-300 là checkpoint cuối cùng)
+    model_path = "models/whisper-finetuned-20251228T043928Z-1-004/whisper-finetuned/checkpoint-300"
+    # Nếu model mới không có đầy đủ file, fallback về model base Whisper
+    if not os.path.exists(model_path):
+        # Có thể dùng model Whisper base nếu cần
+        model_path = "openai/whisper-base"  # Hoặc model khác
     return STTEngine(model_path=model_path)
 
 def show():
     st.title("🗣️ CHUYỂN ĐỔI GIỌNG NÓI SANG VĂN BẢN")
     st.markdown("---")
     
-    # Khởi tạo engine
-    engine = get_stt_engine()
+    # Chọn ngôn ngữ
+    language = st.selectbox(
+        "Chọn ngôn ngữ:",
+        ["Tiếng Việt", "Tiếng Anh"],
+        index=0
+    )
+    
+    # Khởi tạo engine dựa trên ngôn ngữ đã chọn
+    # Lưu vào session state để đảm bảo dùng đúng engine
+    if language == "Tiếng Việt":
+        engine = get_stt_engine_vn()
+        lang_code = "vi"  # Mã ngôn ngữ ISO 639-1 cho tiếng Việt
+        st.session_state.stt_language = "vi"
+        st.session_state.stt_engine_type = "vn"
+    else:
+        engine = get_stt_engine_en()
+        lang_code = "en"  # Mã ngôn ngữ ISO 639-1 cho tiếng Anh
+        st.session_state.stt_language = "en"
+        st.session_state.stt_engine_type = "en"
     
     # File output
     output_file = "recordings/stt_input.wav"
@@ -79,7 +107,7 @@ def show():
         else:
             with st.spinner("Đang phân tích âm thanh, vui lòng đợi..."):
                 try:
-                    result_text = engine.predict(output_file)
+                    result_text = engine.predict(output_file, language=lang_code)
                     st.session_state.stt_result = result_text
                 except Exception as e:
                     st.error(f"Lỗi xử lý: {e}")

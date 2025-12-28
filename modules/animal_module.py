@@ -71,7 +71,7 @@ def _translate_label(label):
     return translations.get(label.lower(), label.replace("_", " ").title())
 
 def show():
-    st.title("🐾 Nhận diện âm thanh động vật")
+    st.title("🐾 NHẬN DIỆN ÂM THANH")
     st.markdown("---")
     
     # Khởi tạo engine
@@ -193,7 +193,7 @@ def show():
                 confidence = top_result["confidence"]
                 label_vn = _translate_label(label)
                 is_animal = result.get("is_animal", False)
-                prefix = "[Động vật]" if is_animal else "[Âm thanh]"
+                prefix = "[ÂM THANH]" if is_animal else "[ÂM THANH]"
                 
                 st.markdown(f"### {prefix} {label_vn}")
                 st.markdown(f"**Độ tin cậy:** {confidence}")
@@ -208,7 +208,7 @@ def show():
                     label_vn = _translate_label(label)
                     confidence = item["confidence"]
                     is_animal = engine._is_animal_label(label)
-                    prefix = "[Động vật]" if is_animal else "[Âm thanh]"
+                    prefix = "[ÂM THANH]" if is_animal else "[ÂM THANH]"
                     
                     with st.expander(f"{i}. {prefix} {label_vn} ({label})"):
                         st.write(f"**Độ tin cậy:** {confidence}")

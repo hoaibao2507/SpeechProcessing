@@ -53,10 +53,11 @@ class STTEngine:
             print(f"Lỗi load model STT: {e}")
             self.transcriber = None
 
-    def predict(self, audio_path):
+    def predict(self, audio_path, language="vietnamese"):
         """
         Nhận diện văn bản từ file âm thanh.
         :param audio_path: Đường dẫn file âm thanh (.wav, .mp3)
+        :param language: Ngôn ngữ để nhận diện ("vietnamese" hoặc "english")
         :return: Chuỗi văn bản kết quả
         """
         if self.transcriber is None:
@@ -66,17 +67,43 @@ class STTEngine:
             return "Lỗi: Không tìm thấy file âm thanh."
 
         try:
-            print(f"Đang xử lý file: {audio_path}")
+            print(f"Đang xử lý file: {audio_path} với ngôn ngữ: {language}")
             
             # --- BƯỚC XỬ LÝ ÂM THANH (Giống code Colab của bạn) ---
             # Load file và ép về 16kHz (yêu cầu của Whisper)
             audio_array, sampling_rate = librosa.load(audio_path, sr=16000)
 
             # --- BƯỚC DỰ ĐOÁN ---
-            # generate_kwargs={"language": "vietnamese"} giúp AI định hướng tốt hơn
+            # Force language để tránh auto-detection
+            # Chuyển đổi mã ngôn ngữ nếu cần
+            lang_map = {
+                "vi": "vietnamese",
+                "en": "english",
+                "vietnamese": "vietnamese",
+                "english": "english"
+            }
+            lang_code = lang_map.get(language, language)
+            
+            # Sử dụng forced_decoder_ids để ép ngôn ngữ
+            try:
+                forced_decoder_ids = self.processor.get_decoder_prompt_ids(
+                    language=lang_code, 
+                    task="transcribe"
+                )
+            except:
+                # Nếu không có get_decoder_prompt_ids, dùng cách khác
+                forced_decoder_ids = None
+            
+            generate_kwargs = {
+                "language": lang_code,
+                "task": "transcribe"
+            }
+            if forced_decoder_ids is not None:
+                generate_kwargs["forced_decoder_ids"] = forced_decoder_ids
+            
             result = self.transcriber(
                 audio_array, 
-                generate_kwargs={"language": "vietnamese"}
+                generate_kwargs=generate_kwargs
             )
             
             text = result["text"]
